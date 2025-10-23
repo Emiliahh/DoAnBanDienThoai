@@ -1,0 +1,21 @@
+services:
+    nodejs:
+        build:
+            context: ./server
+            dockerfile: Dockerfile
+        ports:
+            - '3000:3000'
+        volumes:
+            - ./server/src/uploads:/uploads
+
+    nginx:
+        image: nginx:latest
+        volumes:
+            - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+            - ./nginx/ssl:/etc/nginx/ssl
+            - ./client/dist:/usr/share/nginx/html
+        ports:
+            - '80:80'
+            - '443:443'
+        depends_on:
+            - nodejs
